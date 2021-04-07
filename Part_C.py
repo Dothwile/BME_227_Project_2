@@ -8,7 +8,7 @@ BME227 Project 2
 
 """
 #%% 
-from Project1_submit import read_and_plot_serial_data
+from Part_B import read_and_plot_serial_data
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -16,7 +16,7 @@ from matplotlib import pyplot as plt
 
 out_folder = '/BME227_code'
 com_port = '/dev/cu.usbserial-1420'
-read_and_plot_serial_data(com_port,60,3,500,"./Project1_submit_Data/") 
+read_and_plot_serial_data(com_port,60,3,500,"./Part_B/") 
 
 #%% Cell Two: Epoch the data
 
@@ -40,7 +40,6 @@ for epoch in range(epoch_count):
         for sample in range(epoch_sample_count):
             emg_epoch[epoch,sample,channel] = emg_voltage[sample+begin,channel]
     begin = begin + 100
-
 
 # save the epochs    
 np.save("ArduinoData_2021-03-17_00/59/47_epochs.npy",emg_epoch)
