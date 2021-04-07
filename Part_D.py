@@ -12,8 +12,8 @@ com_port = 'COM3'
 
 # Note that these all should be loaded in save for sample_buffer
 n_channels = 3
-samples = 400 
-sample_buffer = np.zeros((samples, n_channels))
+epoch_size = 200
+sample_buffer = np.zeros((epoch_size, n_channels))
 
 # %% Live Reading Main Method
 
@@ -30,7 +30,7 @@ def Read_EMG_Live():
             # Extract data string to parse
             data_string = arduino_data.readline().decode('ascii')
             # Split into list of strings
-            data_string = data_string.split()
+            data_string = data_string.split() # First element is time of sample in ms, rest are sensor values
             
             # Uses short circuit logic and to avoid indexing errors when read line empty or short
             if(len(data_string) >= (n_channels + 1) and (st[sample_index] >= int(data_string[0]))):
@@ -40,7 +40,7 @@ def Read_EMG_Live():
                 # Converts to V
                 for channel in range(n_channels):
                     # Write collected data point from each channel to associated position in sd
-                    sd[sample_index, channel] = int(data_string[channel+1])*5.0/1024
+                    sample_buffer[sample_index, channel] = int(data_string[channel+1])*5.0/1024
             
             else: # If data readline is not full, consider it a dropped point and increase time sample index
                 st[sample_index] = int(data_string[0])
