@@ -7,8 +7,12 @@ import os
 import argparse
 from matplotlib.animation import FuncAnimation
 #%%
+
+data_path = 'Arduino_Data'
+com = 'COM3'
+
  # main function
-def record_data(com_port='/dev/cu.usbserial-1440', recording_duration=60, n_channels=3, fs=500, out_string='/Users/Kai/Downloads/BME227-S21-main/Arduino_data'):  
+def record_data(com_port=com, recording_duration=60, n_channels=3, fs=500, out_string=data_path):  
     
 #%% initialize array
 
@@ -138,6 +142,6 @@ def record_data(com_port='/dev/cu.usbserial-1440', recording_duration=60, n_chan
             
     return 
 
-record_data(com_port='/dev/cu.usbserial-1440', recording_duration=60, n_channels=3, fs=500, out_string='/Users/Kai/Downloads/BME227-S21-main/Arduino_data')
+record_data(com_port=com, recording_duration=60, n_channels=3, fs=500, out_string=data_path)
 
 
