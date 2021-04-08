@@ -15,7 +15,7 @@ fig = plt.figure()
 ax = plt.axes(xlim=(0, 60), ylim=(0, 8))
 line, = ax.step([], [], lw=3)
 actions=['Rest','Left','Right','Bicep','Bicep & Left','Right & Left']
-plt.yticks([0.5,1.5,2.5,3.5,4.5,5.5],labels=actions)
+plt.yticks([0,1,2,3,4,5],labels=actions)
  
 display_data_y=np.array([0,0,1,1,2,2,3,3,4,4,5,5]*5)
 display_data_x=np.arange(0,60)
@@ -34,4 +34,4 @@ def animate(i):
     return line,
 
 anim = FuncAnimation(fig, animate, init_func=init,
-                               frames=200, interval=960, blit=True)
+                               frames=200, interval=1000, blit=True)
