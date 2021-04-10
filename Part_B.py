@@ -2,10 +2,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import serial
-import datetime as dt
+import datetime, pytz
 import os
-import argparse
-from matplotlib.animation import FuncAnimation
+
+
 #%%
 
 data_path = 'Arduino_Data'
@@ -56,7 +56,7 @@ def record_data(com_port=com, recording_duration=60, n_channels=3, fs=500, out_s
          #create display plot arrays
         display_data_y=np.array([0,0,1,1,2,2,3,3,4,4,5,5]*5)
         display_data_x=np.arange(0,60)  
-        plot=plt.step(display_data_x,display_data_y) # create plot
+        plt.step(display_data_x,display_data_y) # create plot
         actions=['Rest','Left','Right','Bicep','Bicep & Left','Right & Left']
         plt.xlim([0,60]) # set the x axis limits
         plt.ylim([0,8]) # set the y axis limits 
@@ -67,20 +67,20 @@ def record_data(com_port=com, recording_duration=60, n_channels=3, fs=500, out_s
         #plt.legend(('ch1','ch2','ch3')) # add legend with data from A0 as ch1, A2 as ch2, A3 as ch3
         
     
-        return plot
+        return 
     
     
     
     
     
     #Read data and save
+    
+    initialize_plot() # initialize plot function
+    plt.show()
     print('rest, squeez left arm, then right armn then bicep, then bicep & left, then right &left') 
     print('Hold each action for 2s')
-    
-   
    
     sample_time, sample_data= initialize_arrays(recording_duration, n_channels, fs) # call array function
-    initialize_plot() # initialize plot function
     
     prompt=input('enter s to start:').lower()
     
@@ -121,12 +121,13 @@ def record_data(com_port=com, recording_duration=60, n_channels=3, fs=500, out_s
             print('save failed')
     else:
             print('folder created')
-        
-    now=dt.datetime.now() #get time 
-    now.isoformat()
-        
+            
+    now = datetime.datetime.now(pytz.timezone('US/Eastern')).strftime('%Y-%m-%dT%H_%M_%S.%f%z')
+    
+   
+    
     np.save(f'{path_string}/ArduinoData_{now}',sample_data) #save sample_data
-    np.save(f'{path_string}/ArduinoTime_{now}',sample_time) #save sample_time
+   
         
             
     return 

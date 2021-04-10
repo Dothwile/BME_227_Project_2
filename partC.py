@@ -37,7 +37,24 @@ def evaluate_and_plot_confusion(path_of_data):
         # get varience of epochs
         emg_epoch_var=np.var(emg_epoch,1)
         
-        fake_epoch_var=np.array([[.0001,.0001,.0001,.0001,.0001,.0003,.0003,.0003,.0003,.0003,.0001,.0001,.0001,.0001,.0001,.0003,.0003,.0003,.0003,.0003]*10,[.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003]*10])
+        fake_epoch_var=np.array([[.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,\
+                                  .0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,\
+                                      .0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,\
+                                          .0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,\
+                                          .0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,\
+                                              .0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,]*5,\
+                                 [.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,\
+                                  .0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,\
+                                      .0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,\
+                                          .0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,\
+                                              .0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,
+                                          .0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003]*5,\
+                                     [.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,\
+                                      .0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,\
+                                          .0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,\
+                                              .0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,\
+                                                  .0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,.0003,\
+                                                      .0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,.0001,]*5])
         proper_fake_epoch_var=fake_epoch_var.T
         
         # create boolean arrays 
@@ -55,14 +72,15 @@ def evaluate_and_plot_confusion(path_of_data):
         is_true_bicep=np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,\
                                 0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,\
                                     1,1,1,1,1,1,1,1,1,1, 0,0,0,0,0,0,0,0,0,0]*5,dtype=bool)
-        return emg_epoch_var, is_true_left, is_true_right, is_true_bicep
+        return emg_epoch_var, proper_fake_epoch_var, is_true_left, is_true_right, is_true_bicep
         
     def left_hist_plot(emg_epoch_var, is_true_left):
         #left hand 
         
-        plt.hist(emg_epoch_var[is_true_left==1,0],bins=35,alpha=0.5)
-        plt.hist(emg_epoch_var[is_true_left==0,0],bins=35, alpha=0.5) # create plot
-        plt.axvline(x=0.0002)
+        plt.hist(emg_epoch_var[is_true_left==1,0],bins=60,alpha=0.5)
+        plt.hist(emg_epoch_var[is_true_left==0,0],bins=60, alpha=0.5) # create plot
+        #plt.axvline(x=0.0002)
+        plt.xlim([0,0.003])
         plt.xlabel('Variance of left arm') # add x axis label
         plt.ylabel('number of trials') # add y axis label
         plt.title('Var of left arm true vs not true') # add title 
@@ -75,8 +93,9 @@ def evaluate_and_plot_confusion(path_of_data):
     def right_hist_plot(emg_epoch_var, is_true_right):
         #right arm
         plt.hist(emg_epoch_var[is_true_right==1,1],bins=40,alpha=0.5)
-        plt.hist(emg_epoch_var[is_true_right==0,1],bins=80, alpha=0.5) # create plot
-        plt.axvline(x=0.00019)
+        plt.hist(emg_epoch_var[is_true_right==0,1],bins=40, alpha=0.5) # create plot
+        #plt.axvline(x=0.00019)
+        plt.xlim([0,0.002])
         plt.xlabel('Variance of right arm') # add x axis label
         plt.ylabel('number of trials') # add y axis label
         plt.title('Variance of right arm of true right and not true right') # add title 
@@ -86,9 +105,10 @@ def evaluate_and_plot_confusion(path_of_data):
         return
     
     def bicep_hist_plot(emg_epoch_var, is_true_bicep):
-        plt.hist(emg_epoch_var[is_true_bicep==1,2],bins=40,alpha=0.5)
-        plt.hist(emg_epoch_var[is_true_bicep==0,1],bins=80, alpha=0.5) # create plot
-        plt.axvline(x=0.00019)
+        plt.hist(emg_epoch_var[is_true_bicep==1,2],bins=60,alpha=0.5)
+        plt.hist(emg_epoch_var[is_true_bicep==0,1],bins=40, alpha=0.5) # create plot
+        #plt.axvline(x=0.00019)
+        plt.xlim([0,0.003])
         plt.xlabel('Variance of bicep') # add x axis label
         plt.ylabel('number of trials') # add y axis label
         plt.title('Variance of bicep of true and not true') # add title 
@@ -167,7 +187,7 @@ def evaluate_and_plot_confusion(path_of_data):
         
         
         epoch_count=len(is_true_6_left)
-        true_actions=np.array(['rest']*epoch_count,dtype=object)
+        true_actions=np.array(['rest']*epoch_count,dtype='object')
         true_actions[is_true_6_left]='left'
         true_actions[is_true_6_right]='right'
         true_actions[is_true_6_rest]='rest'
@@ -175,7 +195,7 @@ def evaluate_and_plot_confusion(path_of_data):
         true_actions[is_true_6_down]='down'
         true_actions[is_true_6_click]='click'
         
-        predicted_actions=np.array(['rest']*epoch_count,dtype=object)
+        predicted_actions=np.array(['rest']*epoch_count,dtype='object')
         predicted_actions[is_predicted_6_left]='left'
         predicted_actions[is_predicted_6_right]='right'
         predicted_actions[is_predicted_6_rest]='rest'
@@ -206,15 +226,17 @@ def evaluate_and_plot_confusion(path_of_data):
         plt.ylabel('predicted action') # set y axis title
         plt.colorbar(label='# trials') # creat color bar 
         plt.savefig(f'{path_string}/ArduinoData_{now}_confusionmatrix.png') #save figure
-        return
-
+        print(true_actions)
+        print(predicted_actions)
+        return true_actions, predicted_actions
+  
     print('Loading saved data...')
     print('epoching data...')
     # call function to load data and seperate the data into epochs
     emg_epoch=load_data(path=path_of_data)
     
     # call function to create is_true arrays
-    emg_epoch_var, is_true_left, is_true_right, is_true_bicep=var_and_true_arrays(emg_epoch)
+    emg_epoch_var, proper_fake_epoch_var, is_true_left, is_true_right, is_true_bicep=var_and_true_arrays(emg_epoch)
     
     # call functions to plot histograms of data
     print('plotting histograms to choose threshold')
@@ -242,7 +264,9 @@ def evaluate_and_plot_confusion(path_of_data):
     print(f'accuracy for left arm:{accuracy_left}')
     print(f'accuracy for right arm:{accuracy_right}')
     print(f'accuracy for bicep:{accuracy_bicep}')
-    
-    
-evaluate_and_plot_confusion('/Users/Kai/Documents/GitHub/BME_227_Project_2/Arduino_Data/ArduinoData_2021-04-08 15:22:54.674207.npy')  
+    return emg_epoch_var
+
+
+file='Arduino_Data/ArduinoData_2021-04-10T11_02_31.460505-0400.npy'    
+evaluate_and_plot_confusion(file)  
 
