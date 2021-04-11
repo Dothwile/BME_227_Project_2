@@ -5,6 +5,7 @@
 import Part_B.py
 import Part_C.py
 '''
+import time
 import serial
 import argparse
 import numpy as np
@@ -30,20 +31,30 @@ v3 = 0.01
 
 # %% Setup Commands and Methods
 
+# Create parser to read in parameters from CMD
+parser = argparse.ArgumentParser(description='Read EMG data and use it for basic GUI interfacing (mouse operation)')
+
+# Add arguments to help text
+parser.add_argument('com_port', help='Port of connected EMG device', type=str)
+parser.add_argument('run_time', help='Length of time program should run for in seconds', type=float)
+parser.add_argument('gui_scale', help='Relative speed and distance of mouse movements to account for different screen size', type=float)
+
+# Collect arguments into an accessible object
+args = parser.parse_args()
+
 arduino_data = serial.Serial() # Give the Serial process an appropriate alias
 
-def OpenPort(port, baud):
+def OpenPort(port):
     '''OpenPort
     Arguments-
     port ~ String of the COM port to open to
-    baud ~ Integer of the data baudrate to use
     
     Returns-
     NONE
     
     Opens the Serial port to read in data
     '''
-    arduino_data.baudrate = baud # Set baudrate
+    arduino_data.baudrate = 500_000 # Set baudrate
     arduino_data.port = port # Sets the port to use
     arduino_data.open()
 
@@ -64,7 +75,7 @@ atexit.register(OnExit) # Registers OnExit method to call on program close
 
 # %% Helper Methods
 
-def Read_EMG_Live():
+def Read_EMG_Epoch():
     ''' Read_EMG_Live
     
     
@@ -103,10 +114,11 @@ def Classify_EMG(acting_buffer):
     '''    
     pass
 
-def Act(action):
+def Act(action, gui_scale):
     ''' Act
     Arguments-
     action ~ string of the action for GUI to do
+    gui_scale ~ the amount to scale mouse speed and movement by
     
     Returns-
     NONE
@@ -115,5 +127,20 @@ def Act(action):
     '''
     pass
 
-def Run():
+def Run(com_port, run_time, gui_scale):
+    '''Run
+    '''
     
+    start_time = time.time() # Get program start time in seconds since epoch (1970 one not local data one)
+    OpenPort(com_port)
+    while ((time.time() - start_time) <= run_time):
+        current_epoch = Read_EMG_Epoch()
+        action = Classify_EMG(current_epoch)
+        Act(action, gui_scale)
+        
+    print("Run_time finished")
+    exit()
+    
+# %% Main Method call
+
+Run(args.com_port, args.run_time, args.gui_scale)
