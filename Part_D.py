@@ -98,7 +98,7 @@ def Read_EMG_Epoch():
                 sample_buffer[sample_index, channel] = int(data_string[channel+1])*5.0/1024
         
         else:
-            pass # figure out what to do in drop cases
+            pass # figure out what to do in drop cases // Could enclose whole if in a while loop to only ever read if full-line available??
             
     return sample_buffer # Returns a full epoch
 
@@ -132,14 +132,16 @@ def Run(com_port, run_time, gui_scale):
     '''
     
     start_time = time.time() # Get program start time in seconds since epoch (1970 one not local data one)
-    OpenPort(com_port)
-    while ((time.time() - start_time) <= run_time):
-        current_epoch = Read_EMG_Epoch()
-        action = Classify_EMG(current_epoch)
-        Act(action, gui_scale)
+    OpenPort(com_port) # Opens the COM port to read in data
+    while ((time.time() - start_time) <= run_time): # Checks the difference in start_time and current time is less than run_time
+        
+        current_epoch = Read_EMG_Epoch() # Reads data live into current_epoch for processing
+        action = Classify_EMG(current_epoch) # Calls classify on current_epoch to determine what GUI action to throw
+        
+        Act(action, gui_scale) # Calls act to perform GUI action
         
     print("Run_time finished")
-    exit()
+    exit() # End program (redundant but habit, ensures OnExit fires)
     
 # %% Main Method call
 
