@@ -444,6 +444,21 @@ def evaluate_and_plot_confusion(path_of_data):
     prompt=input('enter the thresholds as a comma seperated list:')
     # split list after each comma
     left_var, right_var, bicep_var= prompt.split(',')
+    
+    #save variables to files for part D
+    left_var_edit = open('left_var.txt','w+')
+    left_var_edit.write(left_var)
+    left_var_edit.close()
+    
+    right_var_edit = open('right_var.txt','w+')
+    right_var_edit.write(right_var)
+    right_var_edit.close()
+    
+    bicep_var_edit = open('bicep_var.txt','w+')
+    bicep_var_edit.write(bicep_var)
+    bicep_var_edit.close()
+    
+    
     # conver inputs from str to float 
     left=float(left_var)
     right=float(right_var)
