@@ -113,4 +113,7 @@ def Act(action):
     
     Executes a GUI action
     '''
-    pass    
+    pass
+
+def Run():
+    
