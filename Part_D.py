@@ -48,7 +48,7 @@ parser = argparse.ArgumentParser(description='Read EMG data and use it for basic
 # Add arguments to help text
 parser.add_argument('com_port', help='Port of connected EMG device', type=str)
 parser.add_argument('run_time', help='Length of time program should run for in seconds', type=float)
-parser.add_argument('gui_scale', help='Relative speed and distance of mouse movements, default of 1 takes 5 actions to cross a screen', type=float)
+parser.add_argument('gui_scale', help='Relative speed and distance of mouse movements, a value of 1 takes 5 actions to cross a screen', type=float)
 
 # Collect arguments into an accessible object
 args = parser.parse_args()
@@ -141,11 +141,11 @@ def Act(action, gui_scale):
     if(action == 'up'): # Move cursor up
         pyg.moveTo(cur_pos[0],cur_pos[1]-gui_scale*(1080/5))
     if(action == 'left'): # Move cursor left
-        pyg.moveTo(cur_pos[0]-(x_max/5),cur_pos[1])
+        pyg.moveTo(cur_pos[0]-gui_scale*(1920/5),cur_pos[1])
     if(action == 'down'): # Move cursor down
-        pyg.moveTo(cur_pos[0],cur_pos[1]+(y_max/5))
+        pyg.moveTo(cur_pos[0],cur_pos[1]+gui_scale*(1080/5))
     if(action == 'right'): # Move cursor right
-        pyg.moveTo(cur_pos[1]+(x_max/5),cur_pos[1])
+        pyg.moveTo(cur_pos[1]+gui_scale*(1920/5),cur_pos[1])
     if(action == 'click'): # Click at current curosr position
         pyg.click()
     if (action == 'rest'): # Rest
