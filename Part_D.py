@@ -23,9 +23,6 @@ import atexit # To handle closing Serial port on program exit
 
 
 # %% Dummy variables, will figure origin later
-com_port = 'COM3'
-
-gui_scale = 1 # Amount to scale speed of mouse movements
 
 # Note that these all should be loaded in save for sample_buffer
 n_channels = 3
@@ -38,7 +35,7 @@ v2 = 0.01
 v3 = 0.01
 
 # Resolution of the monitor being used
-screen_resolution = (1920,1080) # For now will assume a standard 1080p resolution // TODO, implement optional argument, possible saveable preference
+#screen_resolution = (1920,1080) # For now will assume a standard 1080p resolution // TODO, implement optional argument, possible saveable preference
 
 # %% Setup Commands and Methods
 
@@ -71,6 +68,7 @@ def Open_Port(port):
     
     if arduino_data.isOpen(): # Checks if port is already open, closes it if so // Catches dangling port errors on program unexpectedly closing
         arduino_data.close() # Closes dangling port
+        time.sleep(0.001)# Time to close port
         
     arduino_data.open() # Opens the port
 
@@ -93,8 +91,13 @@ atexit.register(On_Exit) # Registers On_Exit method to call on program close // 
 
 def Read_EMG_Epoch():
     ''' Read_EMG_Live
+    Arguments-
+    NONE
     
+    Returns-
+    NONE
     
+    Reads a live epoch from teh 3 emg channels
     '''
 
     #with serial.Serial(port=com_port,baudrate=500000) as arduino_data:
@@ -115,7 +118,7 @@ def Read_EMG_Epoch():
         
         else:
             pass # figure out what to do in drop cases // Could enclose whole if in a while loop to only ever read if full-line available??
-            
+    
     return sample_buffer # Returns a full epoch
 
 def Classify_EMG(acting_buffer):
@@ -128,10 +131,8 @@ def Classify_EMG(acting_buffer):
     
     Classifies the EMG data of an epoch
     '''    
+    emg_epoch_var = np.transpose(np.nanvar(acting_buffer,axis=0)) # Should be a n_channel x 1 array
     
-    
-    
-
 def Act(action, gui_scale):
     ''' Act
     Arguments-
@@ -157,6 +158,8 @@ def Act(action, gui_scale):
         pyg.click()
     if (action == 'rest'): # Rest
         pass # Does nothing, but included for clarity and functinoal consistency
+        
+    #print("Act")
 
 def Run(com_port, run_time, gui_scale):
     '''Run
@@ -170,7 +173,7 @@ def Run(com_port, run_time, gui_scale):
         action = Classify_EMG(current_epoch) # Calls classify on current_epoch to determine what GUI action to throw
         
         Act(action, gui_scale) # Calls act to perform GUI action
-        
+           
     print("Run_time finished")
     
 # %% Main Method call
