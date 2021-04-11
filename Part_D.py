@@ -1,3 +1,12 @@
+'''
+Part_D.py
+
+@author: Artur Smiechowski
+
+A program that:
+    
+'''
+
 # %% Imports
 
 '''
@@ -44,8 +53,8 @@ args = parser.parse_args()
 
 arduino_data = serial.Serial() # Give the Serial process an appropriate alias
 
-def OpenPort(port):
-    '''OpenPort
+def Open_Port(port):
+    '''Open_Port
     Arguments-
     port ~ String of the COM port to open to
     
@@ -58,8 +67,8 @@ def OpenPort(port):
     arduino_data.port = port # Sets the port to use
     arduino_data.open()
 
-def OnExit():
-    '''OnExit
+def On_Exit():
+    '''On_Exit
     Arguments-
     NONE
     
@@ -71,7 +80,7 @@ def OnExit():
     arduino_data.close()
     print("Closing EMG Interface")
 
-atexit.register(OnExit) # Registers OnExit method to call on program close
+atexit.register(On_Exit) # Registers On_Exit method to call on program close
 
 # %% Helper Methods
 
@@ -132,7 +141,7 @@ def Run(com_port, run_time, gui_scale):
     '''
     
     start_time = time.time() # Get program start time in seconds since epoch (1970 one not local data one)
-    OpenPort(com_port) # Opens the COM port to read in data
+    Open_Port(com_port) # Opens the COM port to read in data
     while ((time.time() - start_time) <= run_time): # Checks the difference in start_time and current time is less than run_time
         
         current_epoch = Read_EMG_Epoch() # Reads data live into current_epoch for processing
@@ -141,7 +150,7 @@ def Run(com_port, run_time, gui_scale):
         Act(action, gui_scale) # Calls act to perform GUI action
         
     print("Run_time finished")
-    exit() # End program (redundant but habit, ensures OnExit fires)
+    exit() # End program (redundant but habit, ensures On_Exit fires)
     
 # %% Main Method call
 
