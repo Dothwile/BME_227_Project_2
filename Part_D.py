@@ -30,9 +30,9 @@ epoch_size = 200
 sample_buffer = np.zeros((epoch_size, n_channels))
 
 # Variances from other script
-v1 = 0.01
-v2 = 0.01
-v3 = 0.01
+left_threshhold = 0.01
+right_threshhold = 0.01
+bicep_threshhold = 0.01
 
 # Resolution of the monitor being used
 #screen_resolution = (1920,1080) # For now will assume a standard 1080p resolution // TODO, implement optional argument, possible saveable preference
@@ -130,9 +130,42 @@ def Classify_EMG(acting_buffer):
     action ~ string of the GUI action to complete
     
     Classifies the EMG data of an epoch
-    '''    
-    emg_epoch_var = np.transpose(np.nanvar(acting_buffer,axis=0)) # Should be a n_channel x 1 array
+    '''
+    action = 'rest' # set the return variable to initially be rest
     
+    emg_epoch_var = np.transpose(np.nanvar(acting_buffer,axis=0)) # Gets the variances of each channel in the sample epoch
+    # Should be a n_channel x 1 array
+    
+    # Classify which muscles where tensed (Checks if variuance is greater than channel threshhold)
+    is_left = emg_epoch_var[0] > left_threshhold
+    is_right = emg_epoch_var[1] > right_threshhold
+    is_bicep = emg_epoch_var[2] > bicep_threshhold
+    
+    # Decision 'tree' to assign the return action
+    # Refer to manual for action combinations
+    # Tree first checks if left is active, works down the branches, if not then uses deduction while checking other roots
+    if is_left:
+        if is_right:
+            if is_bicep:
+                pass # action already rest
+            else:
+                action = 'click' # click the mouse
+        elif is_bicep:
+            action = 'down' # move the cursor down
+        else:
+            action = 'left' # move the cursor left
+    elif is_right:
+        if is_bicep:
+            pass # action is already rest
+        else:
+            action = 'right' # move cursor right
+    elif is_bicep:
+        action = 'up' # move the cursor up
+    else:
+        pass # no muscle tensing means action is rest
+    
+    return action
+        
 def Act(action, gui_scale):
     ''' Act
     Arguments-
