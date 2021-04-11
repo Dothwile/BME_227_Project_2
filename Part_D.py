@@ -31,12 +31,14 @@ gui_scale = 1 # Amount to scale speed of mouse movements
 n_channels = 3
 epoch_size = 200
 sample_buffer = np.zeros((epoch_size, n_channels))
-full_buffer = np.zeros((epoch_size, n_channels))
 
 # Variances from other script
 v1 = 0.01
 v2 = 0.01
 v3 = 0.01
+
+# Resolution of the monitor being used
+screen_resolution = (1920,1080) # For now will assume a standard 1080p resolution // TODO, implement optional argument, possible saveable preference
 
 # %% Setup Commands and Methods
 
@@ -46,7 +48,7 @@ parser = argparse.ArgumentParser(description='Read EMG data and use it for basic
 # Add arguments to help text
 parser.add_argument('com_port', help='Port of connected EMG device', type=str)
 parser.add_argument('run_time', help='Length of time program should run for in seconds', type=float)
-parser.add_argument('gui_scale', help='Relative speed and distance of mouse movements to account for different screen size', type=float)
+parser.add_argument('gui_scale', help='Relative speed and distance of mouse movements, default of 1 takes 5 actions to cross a screen', type=float)
 
 # Collect arguments into an accessible object
 args = parser.parse_args()
@@ -96,7 +98,7 @@ def Read_EMG_Epoch():
         # Extract data string to parse
         data_string = arduino_data.readline().decode('ascii')
         # Split into list of strings
-        data_string = data_string.split() # First element is time of sample in ms, rest are sensor values
+        data_string = data_string.split() # First element is time of sample in ms, rest are sensor actions
         
         if(len(data_string) >= (n_channels + 1)):
         
@@ -134,7 +136,20 @@ def Act(action, gui_scale):
     
     Executes a GUI action
     '''
-    pass
+    cur_pos = pyg.position() # Collect current cursor position
+    
+    if(action == 'up'): # Move cursor up
+        pyg.moveTo(cur_pos[0],cur_pos[1]-gui_scale*(1080/5))
+    if(action == 'left'): # Move cursor left
+        pyg.moveTo(cur_pos[0]-(x_max/5),cur_pos[1])
+    if(action == 'down'): # Move cursor down
+        pyg.moveTo(cur_pos[0],cur_pos[1]+(y_max/5))
+    if(action == 'right'): # Move cursor right
+        pyg.moveTo(cur_pos[1]+(x_max/5),cur_pos[1])
+    if(action == 'click'): # Click at current curosr position
+        pyg.click()
+    if (action == 'rest'): # Rest
+        pass # Does nothing, but included for clarity and functinoal consistency
 
 def Run(com_port, run_time, gui_scale):
     '''Run
