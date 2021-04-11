@@ -48,7 +48,8 @@ parser = argparse.ArgumentParser(description='Read EMG data and use it for basic
 # Add arguments to help text
 parser.add_argument('com_port', help='Port of connected EMG device', type=str)
 parser.add_argument('run_time', help='Length of time program should run for in seconds', type=float)
-parser.add_argument('gui_scale', help='Relative speed and distance of mouse movements, a value of 1 takes 5 actions to cross a screen', type=float)
+# Optional Arguments
+parser.add_argument('--gui_scale', help='Relative speed and distance of mouse movements, default value of 1 takes 5 actions to cross a screen', default=1.0, type=float)
 
 # Collect arguments into an accessible object
 args = parser.parse_args()
