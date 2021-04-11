@@ -68,7 +68,11 @@ def Open_Port(port):
     '''
     arduino_data.baudrate = 500_000 # Set baudrate
     arduino_data.port = port # Sets the port to use
-    arduino_data.open()
+    
+    if arduino_data.isOpen(): # Checks if port is already open, closes it if so // Catches dangling port errors on program unexpectedly closing
+        arduino_data.close() # Closes dangling port
+        
+    arduino_data.open() # Opens the port
 
 def On_Exit():
     '''On_Exit
@@ -83,7 +87,7 @@ def On_Exit():
     arduino_data.close()
     print("Closing EMG Interface")
 
-atexit.register(On_Exit) # Registers On_Exit method to call on program close
+atexit.register(On_Exit) # Registers On_Exit method to call on program close // Does not catch exception closing
 
 # %% Helper Methods
 
@@ -105,7 +109,7 @@ def Read_EMG_Epoch():
         
             # Writes the output of each channel to associate column of data array
             # Converts to V
-            for channel in range(n_channels):
+            for channel in range(n_channels): # Currently timestamp of data is ignored
                 # Write collected data point from each channel to associated position in sd
                 sample_buffer[sample_index, channel] = int(data_string[channel+1])*5.0/1024
         
@@ -124,7 +128,9 @@ def Classify_EMG(acting_buffer):
     
     Classifies the EMG data of an epoch
     '''    
-    pass
+    
+    
+    
 
 def Act(action, gui_scale):
     ''' Act
@@ -156,7 +162,7 @@ def Run(com_port, run_time, gui_scale):
     '''Run
     '''
     
-    start_time = time.time() # Get program start time in seconds since epoch (1970 one not local data one)
+    start_time = time.time() # Get program start time in seconds since epoch (1970 one not local data one) // TODO change to use 1st column (timestamp of data in millisec)
     Open_Port(com_port) # Opens the COM port to read in data
     while ((time.time() - start_time) <= run_time): # Checks the difference in start_time and current time is less than run_time
         
@@ -166,7 +172,6 @@ def Run(com_port, run_time, gui_scale):
         Act(action, gui_scale) # Calls act to perform GUI action
         
     print("Run_time finished")
-    exit() # End program (redundant but habit, ensures On_Exit fires)
     
 # %% Main Method call
 
