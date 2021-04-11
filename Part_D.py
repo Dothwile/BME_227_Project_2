@@ -30,9 +30,9 @@ epoch_size = 200
 sample_buffer = np.zeros((epoch_size, n_channels))
 
 # Variances from other script
-left_threshhold = 0.01
-right_threshhold = 0.01
-bicep_threshhold = 0.01
+left_threshhold = 0.00025
+right_threshhold = 0.0003
+bicep_threshhold = 0.001
 
 # Resolution of the monitor being used
 #screen_resolution = (1920,1080) # For now will assume a standard 1080p resolution // TODO, implement optional argument, possible saveable preference
