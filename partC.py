@@ -128,8 +128,8 @@ def evaluate_and_plot_confusion(path_of_data):
         '''
         #left hand 
         
-        plt.hist(emg_epoch_var[is_true_left==1,0],bins=60,alpha=0.5)
-        plt.hist(emg_epoch_var[is_true_left==0,0],bins=60, alpha=0.5) # create plot
+        plt.hist(emg_epoch_var[is_true_left==1,0],bins=70,alpha=0.5)
+        plt.hist(emg_epoch_var[is_true_left==0,0],bins=70, alpha=0.5) # create plot
         #plt.axvline(x=0.0002)
         plt.xlim([0,0.003])
         plt.xlabel('Variance of left arm') # add x axis label
@@ -158,8 +158,8 @@ def evaluate_and_plot_confusion(path_of_data):
 
         '''
         #right arm
-        plt.hist(emg_epoch_var[is_true_right==1,1],bins=40,alpha=0.5)
-        plt.hist(emg_epoch_var[is_true_right==0,1],bins=40, alpha=0.5) # create plot
+        plt.hist(emg_epoch_var[is_true_right==1,1],bins=60,alpha=0.5)
+        plt.hist(emg_epoch_var[is_true_right==0,1],bins=60, alpha=0.5) # create plot
         #plt.axvline(x=0.00019)
         plt.xlim([0,0.002])
         plt.xlabel('Variance of right arm') # add x axis label
@@ -186,8 +186,8 @@ def evaluate_and_plot_confusion(path_of_data):
         plot of true bicep and not true bicep
 
         '''
-        plt.hist(emg_epoch_var[is_true_bicep==1,2],bins=60,alpha=0.5)
-        plt.hist(emg_epoch_var[is_true_bicep==0,1],bins=40, alpha=0.5) # create plot
+        plt.hist(emg_epoch_var[is_true_bicep==1,2],bins=100,alpha=0.5)
+        plt.hist(emg_epoch_var[is_true_bicep==0,1],bins=60, alpha=0.5) # create plot
         #plt.axvline(x=0.00019)
         plt.xlim([0,0.003])
         plt.xlabel('Variance of bicep') # add x axis label
@@ -415,8 +415,8 @@ def evaluate_and_plot_confusion(path_of_data):
         plt.ylabel('predicted action') # set y axis title
         plt.colorbar(label='# trials') # creat color bar 
         plt.savefig(f'{path_string}/ArduinoData_{now}_confusionmatrix.png') #save figure
-        print(true_actions) # for debugging
-        print(predicted_actions) # for debugging 
+        #print(true_actions) # for debugging
+        #print(predicted_actions) # for debugging 
         return true_actions, predicted_actions
   
     print('Loading saved data...')
@@ -446,8 +446,8 @@ def evaluate_and_plot_confusion(path_of_data):
     left_var, right_var, bicep_var= prompt.split(',')
     
     #save variables to files for part D
-    left_var_edit = open('left_var.txt','w+')
-    left_var_edit.write(left_var)
+    left_var_edit = open('left_var.txt','w+') #create txt file
+    left_var_edit.write(left_var) # write threshold to file from command line input
     left_var_edit.close()
     
     right_var_edit = open('right_var.txt','w+')
@@ -473,17 +473,17 @@ def evaluate_and_plot_confusion(path_of_data):
     # plot confusion matrix
     plot_confusion(is_predicted_left, is_predicted_right, is_predicted_bicep, is_true_left, is_true_right, is_true_bicep)
     # print accuracy
-    print(f'accuracy for left arm:{accuracy_left}')
-    print(f'accuracy for right arm:{accuracy_right}')
-    print(f'accuracy for bicep:{accuracy_bicep}')
+    # calculate overall accuracy
+    overall_accuracy=(accuracy_left+accuracy_right+accuracy_bicep)/3
+    print(f'overall accuracy:{overall_accuracy}')
+    
     # print ITR
-    print(f'ITR left:{itr_time_left}')
-    print(f'ITR right:{itr_time_right}')
-    print(f'ITR bicep:{itr_time_bicep}')
+    overall_itr= (itr_time_left+itr_time_right+itr_time_bicep)/3
+    print(f'overall ITR:{overall_itr}')
     return emg_epoch, emg_epoch_var
 
 
-file='Arduino_Data/ArduinoData_2021-04-10T11_02_31.460505-0400.npy'  # data file to use   
+file='ArduinoData_2021-04-11T18_00_00.763594-0400.npy'  # data file to use   
 
 emg_epoch, emg_epoch_var=evaluate_and_plot_confusion(file)  # call main function
 
