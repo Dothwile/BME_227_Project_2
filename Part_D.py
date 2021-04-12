@@ -29,10 +29,32 @@ n_channels = 3
 epoch_size = 200
 sample_buffer = np.zeros((epoch_size, n_channels))
 
-# Variances from other script
-left_threshhold = 0.00025
-right_threshhold = 0.0003
-bicep_threshhold = 0.001
+# Load in variance values, if file does not exist will use default hard coded ones
+try:
+    # Variances saved from Part_C
+    left_file = open('left_var.txt')
+    left_threshhold = float(left_file.read())
+    left_file.close()
+except FileNotFoundError:
+    print('left_var.txt does not exist, using default threshhold 0.00025')
+    left_threshhold = 0.00025
+    
+try:    
+    right_file = open('right_var.txt')
+    right_threshhold = float(right_file.read())
+    right_file.close()
+except FileNotFoundError:
+    print('right_var.txt does not exist, using default threshhold 0.0003')
+    right_threshhold = 0.0003
+
+try:    
+    bicep_file = open('bicep_var.txt')
+    bicep_threshhold = float(bicep_file.read())
+    bicep_file.close()
+except FileNotFoundError:
+    print('bicep_var.txt does not exist, using default threshhold 0.001')
+    bicep_threshhold = 0.001
+    
 
 # Resolution of the monitor being used
 #screen_resolution = (1920,1080) # For now will assume a standard 1080p resolution // TODO, implement optional argument, possible saveable preference
