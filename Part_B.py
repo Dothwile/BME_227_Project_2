@@ -5,7 +5,6 @@ import serial
 import datetime, pytz
 import os
 
-
 #%%
 
 data_path = 'Arduino_Data'
@@ -67,7 +66,7 @@ def record_data(com_port=com, recording_duration=60, n_channels=3, fs=500, out_s
         #plt.legend(('ch1','ch2','ch3')) # add legend with data from A0 as ch1, A2 as ch2, A3 as ch3
         
     
-        return 
+        return # if there's no return value I don't think you need return(method in method vagueish), can't test so leaving in for now ---Artur
     
     
     
@@ -130,7 +129,7 @@ def record_data(com_port=com, recording_duration=60, n_channels=3, fs=500, out_s
    
         
             
-    return 
+    return # Extraneous return ---Artur
 
 record_data(com_port='/dev/cu.usbserial-1440', recording_duration=60, n_channels=3, fs=500, out_string=data_path)
 

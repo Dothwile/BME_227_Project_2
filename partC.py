@@ -19,9 +19,7 @@ def evaluate_and_plot_confusion(path_of_data):
     now=dt.datetime.now() #get time 
     
     def load_data(path=path_of_data):
-        '''
-        
-
+        '''    
         Parameters
         ----------
         path : string
@@ -49,8 +47,6 @@ def evaluate_and_plot_confusion(path_of_data):
 
     def var_and_true_arrays(emg_epoch):
         '''
-        
-
         Parameters
         ----------
         emg_epoch : array
@@ -112,8 +108,6 @@ def evaluate_and_plot_confusion(path_of_data):
         
     def left_hist_plot(emg_epoch_var, is_true_left):
         '''
-        
-
         Parameters
         ----------
         emg_epoch_var : array 
@@ -199,8 +193,6 @@ def evaluate_and_plot_confusion(path_of_data):
     
     def boolean_arrays(emg_epoch_var, is_true_left, is_true_right, is_true_bicep, left_var, right_var, bicep_var):
         '''
-        
-
         Parameters
         ----------
         emg_epoch_var : array
@@ -229,7 +221,6 @@ def evaluate_and_plot_confusion(path_of_data):
         is_predicted_bicep : boolean array
             boolean array created by setting values in emg_epoch_var to true if they are 
             greater than the threshold that was entered
-
         '''
         
         #create boolean arrarys
@@ -240,8 +231,6 @@ def evaluate_and_plot_confusion(path_of_data):
     
     def hmi_eval(is_predicted_left, is_predicted_right, is_predicted_bicep, is_true_left, is_true_right, is_true_bicep):
         '''
-        
-
         Parameters
         ----------
         is_predicted_left : boolean array
@@ -277,9 +266,8 @@ def evaluate_and_plot_confusion(path_of_data):
              Information transfer rate in bits per second for right arm
         itr_time_bicep : float
              Information transfer rate in bits per second for bicep
-
         '''
-        # for left hand
+        # for left hand ------------------------------------------------------------------------------------------------------
         tp_left = np.count_nonzero(is_predicted_left[is_true_left==1]) # calculate true positives 
         tn_left = np.size(is_predicted_left[is_true_left==0])-np.count_nonzero(is_predicted_left[is_true_left==0]) # calculate true negatives
         fp_left = np.count_nonzero(is_predicted_left[is_true_left==0]) #calculate false positive
@@ -293,7 +281,7 @@ def evaluate_and_plot_confusion(path_of_data):
         itr_trial_left=np.log2(n)+p_left*np.log2(p_left)+(1-p_left)*np.log2((1-p_left)/(n-1))
         itr_time_left=itr_trial_left*5 #information transfer rate in bits/sec
         
-        #for right hand
+        #for right hand ------------------------------------------------------------------------------------------------------
         tp_right = np.count_nonzero(is_predicted_right[is_true_right==1])
         tn_right = np.size(is_predicted_right[is_true_right==0])-np.count_nonzero(is_predicted_right[is_true_right==0])
         fp_right = np.count_nonzero(is_predicted_right[is_true_right==0])
@@ -308,7 +296,7 @@ def evaluate_and_plot_confusion(path_of_data):
         itr_time_right=itr_trial_right*5
         
         
-        # bicep
+        # bicep ------------------------------------------------------------------------------------------------------
         
         tp_bicep = np.count_nonzero(is_predicted_bicep[is_true_bicep==1]) # calculate true positives 
         tn_bicep = np.size(is_predicted_bicep[is_true_bicep==0])-np.count_nonzero(is_predicted_bicep[is_true_bicep==0]) # calculate true negatives
@@ -446,14 +434,17 @@ def evaluate_and_plot_confusion(path_of_data):
     left_var, right_var, bicep_var= prompt.split(',')
     
     #save variables to files for part D
+    # Left forearm threshhold
     left_var_edit = open('left_var.txt','w+') #create txt file
     left_var_edit.write(left_var) # write threshold to file from command line input
     left_var_edit.close()
     
+    # Right forearm threshhold
     right_var_edit = open('right_var.txt','w+')
     right_var_edit.write(right_var)
     right_var_edit.close()
     
+    # Bicep threshhold
     bicep_var_edit = open('bicep_var.txt','w+')
     bicep_var_edit.write(bicep_var)
     bicep_var_edit.close()

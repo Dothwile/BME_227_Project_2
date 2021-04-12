@@ -133,7 +133,7 @@ def Read_EMG_Epoch():
                 sample_buffer[sample_index, channel] = int(data_string[channel+1])*5.0/1024
         
         else:
-            pass # figure out what to do in drop cases // Could enclose whole if in a while loop to only ever read if full-line available??
+            pass # Turns out this error is VERY rare when not rendering things, variance accounts for NaNs so no action needed
     
     return sample_buffer # Returns a full epoch
 
