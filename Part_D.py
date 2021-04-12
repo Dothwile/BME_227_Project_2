@@ -9,11 +9,6 @@ A program that:
 
 # %% Imports
 
-'''
-
-import Part_B.py
-import Part_C.py
-'''
 import time
 import serial
 import argparse
@@ -55,7 +50,6 @@ except FileNotFoundError:
     print('bicep_var.txt does not exist, using default threshhold 0.001')
     bicep_threshhold = 0.001
     
-
 # Resolution of the monitor being used
 #screen_resolution = (1920,1080) # For now will assume a standard 1080p resolution // TODO, implement optional argument, possible saveable preference
 
