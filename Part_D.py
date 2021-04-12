@@ -196,8 +196,12 @@ def Act(action, gui_scale):
 
 def Run(com_port, run_time, gui_scale):
     '''Run
+    Arguments-
+    com_port ~ the serial port that the EMG device is on
+    run_time ~ the time in seconds that the interface runs
+    gui_scale ~ the scaled distance that the cursor moves with each action
     '''
-    
+    print("Starting EMG Interface")
     start_time = time.time() # Get program start time in seconds since epoch (1970 one not local data one) // TODO change to use 1st column (timestamp of data in millisec)
     Open_Port(com_port) # Opens the COM port to read in data
     while ((time.time() - start_time) <= run_time): # Checks the difference in start_time and current time is less than run_time
